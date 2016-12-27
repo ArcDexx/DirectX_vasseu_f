@@ -7,9 +7,12 @@ HINSTANCE hInst;			// current instance
 HWND			hWnd;				// windows handle used in DirectX initialization
 IAEngine::InputManager* g_pInputManager = NULL;
 
+
 // Forward declarations
 bool				CreateWindows(HINSTANCE, int, HWND& hWnd);
 bool				CreateDevice();
+void RenderFrame(void);     // renders a single frame
+
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -56,11 +59,25 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 			g_pInputManager->Manage();
 			// Do a lot of thing like draw triangles with DirectX
+			RenderFrame();
 		}
 	}
 	//Release D3D objectssss
 	delete g_pInputManager;
 	return (int) oMsg.wParam;
+}
+
+// this is the function used to render a single frame
+void RenderFrame(void)
+{
+	float color[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
+	// clear the back buffer to a deep blue
+	devcon->ClearRenderTargetView(backbuffer, color);
+
+	// do 3D rendering on the back buffer here
+
+	// switch the back buffer and the front buffer
+	swapchain->Present(0, 0);
 }
 
 bool CreateDevice()
